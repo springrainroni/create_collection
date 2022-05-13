@@ -114,20 +114,22 @@ describe("create_collection", () => {
     console.log("system", SystemProgram.programId.toBase58());
     console.log("rent",anchor.web3.SYSVAR_RENT_PUBKEY.toBase58());
   
-    const tx = await program.rpc.setCollectionDuringMint(
+    const tx = await program.rpc.setcollectionduringmint(
       {
         accounts: {
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           metadata: metadataAddress,
-          collectionAuthority: program.provider.wallet.publicKey,
-          payer: program.provider.wallet.publicKey,
+          collectionAuthority: program.provider.wallet.payer.publicKey,
+          payer: program.provider.wallet.payer.publicKey,
+          updateAuthority : program.provider.wallet.payer.publicKey,
           collectionMint: mintKey.publicKey,
-          collectionMetadata : mintKey.publicKey,
+          collectionMetadata : "MHuiXt7CvHxT6rGo9qjwrxGt7hA6TeEFkVnzzunMQTT",
           collectionMasterEdition : masterEdition,
-          collectionAuthorityRecord: mintKey.publicKey,
+          collectionAuthorityRecord: anchor.web3.Keypair.generate().publicKey,
           systemProgram: SystemProgram.programId,
           rent: anchor.web3.SYSVAR_RENT_PUBKEY
         },
+        signers: [program.provider.wallet.payer]
       }
     );
     console.log("Your transaction signature", tx);
